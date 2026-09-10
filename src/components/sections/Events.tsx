@@ -1,0 +1,170 @@
+import { motion } from 'framer-motion';
+import { Calendar, ArrowRight, Building2, Users } from 'lucide-react';
+import { events, hasUpcomingEvents } from '@/data/events';
+import { sectionLabels } from '@/data/navigation';
+
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+const organizedByLabel: Record<string, { label: string; icon: typeof Building2 }> = {
+  CCS: { label: 'CCS', icon: Users },
+  University: { label: 'University', icon: Building2 },
+  Partner: { label: 'Partner', icon: Building2 },
+};
+
+export default function Events() {
+  const upcoming = events.filter((e) => e.status === 'upcoming');
+  const past = events.filter((e) => e.status === 'past');
+
+  return (
+    <section id="events" className="relative py-20 md:py-28 px-5 md:px-8">
+      <div className="max-w-[1200px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+          <div className="lg:col-span-8">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              className="section-label mb-4"
+            >
+              {sectionLabels.events}
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ delay: 0.05 }}
+              className="font-display font-semibold text-2xl md:text-4xl tracking-tight text-text"
+            >
+              Events &amp; <span className="text-text-muted">Activities.</span>
+            </motion.h2>
+          </div>
+          <div className="lg:col-span-4 lg:pt-2 flex lg:items-end">
+            <p className="text-sm text-text-secondary leading-relaxed">
+              Workshops, hackathons, coding competitions, guest sessions and community meetups.
+            </p>
+          </div>
+        </div>
+
+        {/* Upcoming */}
+        <div className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+            <h3 className="font-mono text-[11px] text-text-secondary tracking-wider uppercase">
+              Upcoming
+            </h3>
+          </div>
+
+          {!hasUpcomingEvents ? (
+            <div className="border-t border-border pt-8">
+              <p className="font-display text-lg text-text mb-2">
+                New events are coming soon.
+              </p>
+              <p className="text-sm text-text-muted max-w-md leading-relaxed">
+                The CCS team is planning the next set of workshops, sessions and competitions.
+                Check back for updates.
+              </p>
+            </div>
+          ) : (
+            <div className="border-t border-border">
+              {upcoming.map((event, i) => {
+                const orgInfo = organizedByLabel[event.organizedBy];
+                const OrgIcon = orgInfo.icon;
+                return (
+                  <motion.div
+                    key={event.id}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08 }}
+                    className="border-b border-border py-6 grid grid-cols-12 gap-4 items-start"
+                  >
+                    <div className="col-span-12 md:col-span-3">
+                      <div className="flex items-center gap-2 text-xs">
+                        <span className="font-mono text-accent">{event.category}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-2">
+                        <OrgIcon size={11} className="text-text-muted" />
+                        <span className="font-mono text-[10px] text-text-muted">{orgInfo.label}</span>
+                      </div>
+                    </div>
+                    <div className="col-span-12 md:col-span-6">
+                      <h4 className="font-display font-semibold text-lg text-text mb-1">{event.title}</h4>
+                      <p className="text-sm text-text-secondary leading-relaxed">{event.description}</p>
+                    </div>
+                    <div className="col-span-12 md:col-span-3 md:text-right">
+                      <span className="flex items-center gap-1.5 text-sm text-text-secondary md:justify-end">
+                        <Calendar size={13} /> {formatDate(event.date)}
+                      </span>
+                      {event.registrationUrl && (
+                        <a
+                          href={event.registrationUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-flex items-center gap-1 text-sm text-accent hover:gap-2 transition-all"
+                        >
+                          Register <ArrowRight size={13} />
+                        </a>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Past */}
+        {past.length > 0 && (
+          <div>
+            <div className="flex items-center gap-2 mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-text-muted" />
+              <h3 className="font-mono text-[11px] text-text-muted tracking-wider uppercase">
+                Past Events
+              </h3>
+            </div>
+            <div className="border-t border-border">
+              {past.map((event, i) => {
+                const orgInfo = organizedByLabel[event.organizedBy];
+                const OrgIcon = orgInfo.icon;
+                return (
+                  <motion.div
+                    key={event.id}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08 }}
+                    className="border-b border-border py-6 grid grid-cols-12 gap-4 items-start opacity-60"
+                  >
+                    <div className="col-span-12 md:col-span-3">
+                      <span className="font-mono text-xs text-text-muted">{event.category}</span>
+                      <div className="flex items-center gap-1.5 mt-2">
+                        <OrgIcon size={11} className="text-text-muted" />
+                        <span className="font-mono text-[10px] text-text-muted">{orgInfo.label}</span>
+                      </div>
+                    </div>
+                    <div className="col-span-12 md:col-span-6">
+                      <h4 className="font-display font-semibold text-base text-text mb-1">{event.title}</h4>
+                      <p className="text-sm text-text-secondary leading-relaxed">{event.description}</p>
+                    </div>
+                    <div className="col-span-12 md:col-span-3 md:text-right">
+                      <span className="flex items-center gap-1.5 text-sm text-text-muted md:justify-end">
+                        <Calendar size={13} /> {formatDate(event.date)}
+                      </span>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
