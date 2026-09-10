@@ -24,7 +24,7 @@ const initialData: FormData = {
 };
 
 const inputClass =
-  'w-full bg-bg border border-border rounded-xl px-4 py-3 text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors';
+  'w-full bg-bg border border-border px-4 py-3 text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors';
 
 export default function Join() {
   const [formData, setFormData] = useState<FormData>(initialData);
@@ -100,7 +100,7 @@ export default function Join() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="bg-surface border border-border rounded-2xl p-6 md:p-8"
+            className="bg-surface border border-border p-6 md:p-8"
           >
             {submitted ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-16">
@@ -219,7 +219,7 @@ export default function Join() {
 
                 <button
                   type="submit"
-                  className="group w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-accent text-white font-medium text-sm hover:bg-accent-dim transition-colors"
+                  className="group w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-accent text-white font-medium text-sm hover:bg-accent-dim transition-colors"
                 >
                   Join the Community
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

@@ -34,22 +34,22 @@ export default function Team() {
           </div>
         </div>
 
-        <div className="border-t border-border">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3 py-6">
+        <div className="pt-8 border-t border-border">
+          <p className="font-mono text-[10px] text-text-muted tracking-wider uppercase mb-4">
+            Open Roles
+          </p>
+          <div className="flex flex-wrap gap-2">
             {teamRoles.map((role, i) => (
-              <motion.div
+              <motion.span
                 key={role}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                initial={{ opacity: 0, y: 6 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.03 }}
-                className="flex items-baseline gap-2 py-1"
+                className="px-3 py-1.5 border border-border rounded-lg text-sm text-text-secondary bg-surface"
               >
-                <span className="font-mono text-[10px] text-text-muted">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <span className="text-sm text-text-secondary">{role}</span>
-              </motion.div>
+                {role}
+              </motion.span>
             ))}
           </div>
         </div>

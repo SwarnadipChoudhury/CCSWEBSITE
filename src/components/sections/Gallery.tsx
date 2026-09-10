@@ -34,18 +34,22 @@ export default function Gallery() {
 
         {hasGalleryImages ? (
           <>
-            <div className="mt-10 flex flex-wrap gap-2">
+            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-border pb-4">
               {['All', ...galleryCategories].map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setFilter(cat)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
-                    filter === cat
-                      ? 'bg-accent text-white border-accent'
-                      : 'border-border bg-surface text-text-muted hover:text-text hover:border-border-bright'
+                  className={`relative pb-1 font-mono text-xs tracking-wider uppercase transition-colors ${
+                    filter === cat ? 'text-accent' : 'text-text-muted hover:text-text'
                   }`}
                 >
                   {cat}
+                  {filter === cat && (
+                    <motion.span
+                      layoutId="gallery-filter-underline"
+                      className="absolute left-0 right-0 -bottom-[17px] h-[2px] bg-accent"
+                    />
+                  )}
                 </button>
               ))}
             </div>
@@ -59,7 +63,7 @@ export default function Gallery() {
                   viewport={{ once: true }}
                   transition={{ delay: (i % 3) * 0.08 }}
                   onClick={() => setLightbox(i)}
-                  className="group relative mb-4 rounded-2xl overflow-hidden border border-border cursor-pointer hover:border-accent/30 transition-colors bg-surface"
+                  className="group relative mb-4 overflow-hidden border border-border cursor-pointer hover:border-accent/30 transition-colors bg-surface"
                 >
                   <img
                     src={img.url}
@@ -86,7 +90,7 @@ export default function Gallery() {
                 >
                   <button
                     onClick={() => setLightbox(null)}
-                    className="absolute top-6 right-6 w-10 h-10 rounded-full border border-border bg-surface flex items-center justify-center text-text-secondary hover:text-text"
+                    className="absolute top-6 right-6 w-10 h-10 border border-border bg-surface flex items-center justify-center text-text-secondary hover:text-text"
                   >
                     <X size={20} />
                   </button>
@@ -96,7 +100,7 @@ export default function Gallery() {
                     exit={{ scale: 0.9, opacity: 0 }}
                     src={filtered[lightbox].url}
                     alt={filtered[lightbox].alt}
-                    className="max-w-full max-h-[80vh] rounded-2xl object-contain"
+                    className="max-w-full max-h-[80vh] object-contain"
                   />
                 </motion.div>
               )}
@@ -108,7 +112,7 @@ export default function Gallery() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="mt-12 border border-border rounded-2xl p-12 md:p-16 text-center bg-surface"
+            className="mt-12 border border-border p-12 md:p-16 text-center bg-surface"
           >
             <ImageIcon size={32} className="mx-auto text-text-muted mb-4" />
             <div className="font-mono text-xs text-text-muted tracking-wider mb-4">
