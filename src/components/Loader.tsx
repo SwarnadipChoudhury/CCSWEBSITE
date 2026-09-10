@@ -20,8 +20,8 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
     }, 180);
 
     const showFullTimer = setTimeout(() => setShowFull(true), 180 * steps.length + 200);
-    const exitTimer = setTimeout(() => setExiting(true), 180 * steps.length + 900);
-    const completeTimer = setTimeout(() => onComplete(), 180 * steps.length + 1500);
+    const exitTimer = setTimeout(() => setExiting(true), 180 * steps.length + 600);
+    const completeTimer = setTimeout(() => onComplete(), 180 * steps.length + 1100);
 
     return () => {
       clearInterval(stepInterval);

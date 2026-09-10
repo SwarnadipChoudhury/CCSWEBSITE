@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ImageIcon } from 'lucide-react';
 import { gallery, galleryCategories, hasGalleryImages } from '@/data/gallery';
@@ -9,6 +9,19 @@ export default function Gallery() {
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   const filtered = filter === 'All' ? gallery : gallery.filter((img) => img.category === filter);
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    document.body.style.overflow = 'hidden';
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightbox(null);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [lightbox]);
 
   return (
     <section id="gallery" className="relative py-24 md:py-32 px-5 md:px-8 bg-bg-warm">
@@ -69,7 +82,16 @@ export default function Gallery() {
                     visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
                   }}
                   onClick={() => setLightbox(filtered.indexOf(img))}
-                  className="group relative mb-4 overflow-hidden border border-border cursor-pointer hover:border-accent/30 transition-colors bg-surface"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setLightbox(filtered.indexOf(img));
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View image: ${img.alt}`}
+                  className="group relative mb-4 overflow-hidden border border-border cursor-pointer hover:border-accent/30 transition-colors bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 >
                   <img
                     src={img.url}
@@ -92,11 +114,15 @@ export default function Gallery() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => setLightbox(null)}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={filtered[lightbox].alt}
                   className="fixed inset-0 z-[160] bg-bg/95 backdrop-blur-xl flex items-center justify-center p-6"
                 >
                   <button
                     onClick={() => setLightbox(null)}
-                    className="absolute top-6 right-6 w-10 h-10 border border-border bg-surface flex items-center justify-center text-text-secondary hover:text-text"
+                    aria-label="Close image"
+                    className="absolute top-6 right-6 w-11 h-11 border border-border bg-surface flex items-center justify-center text-text-secondary hover:text-text"
                   >
                     <X size={20} />
                   </button>

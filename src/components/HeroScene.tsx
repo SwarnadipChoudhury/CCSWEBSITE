@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -125,14 +125,26 @@ function CoreShape() {
   );
 }
 
+function useTabVisible() {
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const onChange = () => setVisible(document.visibilityState === 'visible');
+    document.addEventListener('visibilitychange', onChange);
+    return () => document.removeEventListener('visibilitychange', onChange);
+  }, []);
+  return visible;
+}
+
 export default function HeroScene() {
   const coarse = useMemo(() => isCoarsePointer(), []);
+  const tabVisible = useTabVisible();
 
   return (
     <Canvas
       camera={{ position: [0, 0, 8], fov: 50 }}
       dpr={coarse ? [1, 1] : [1, 1.5]}
-      gl={{ antialias: true, alpha: true }}
+      gl={{ antialias: !coarse, alpha: true }}
+      frameloop={tabVisible ? 'always' : 'never'}
       style={{ width: '100%', height: '100%' }}
     >
       <NetworkNodes />

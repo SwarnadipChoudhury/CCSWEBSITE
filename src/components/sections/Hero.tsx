@@ -1,8 +1,12 @@
-import { Suspense, lazy, useRef } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { useMotionPrefs } from '@/hooks/useMotionPrefs';
+import HeroSceneFallback from '@/components/HeroSceneFallback';
 
+// Three.js + react-three-fiber is a ~240kB (gzip) chunk. It's only ever
+// requested when this import actually runs, so gating it behind a
+// tablet/desktop viewport check means phones never download it at all.
 const HeroScene = lazy(() => import('@/components/HeroScene'));
 
 const scrollTo = (href: string) => {
@@ -12,6 +16,15 @@ const scrollTo = (href: string) => {
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const { allowRichMotion } = useMotionPrefs();
+  const [enable3D, setEnable3D] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => setEnable3D(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -26,9 +39,13 @@ export default function Hero() {
   return (
     <section ref={sectionRef} id="home" className="relative min-h-screen flex items-center overflow-hidden">
       <motion.div className="absolute inset-0 z-0" style={{ scale: sceneScale, y: sceneY }}>
-        <Suspense fallback={null}>
-          <HeroScene />
-        </Suspense>
+        {enable3D ? (
+          <Suspense fallback={<HeroSceneFallback />}>
+            <HeroScene />
+          </Suspense>
+        ) : (
+          <HeroSceneFallback />
+        )}
       </motion.div>
 
       <div className="absolute inset-0 z-1 bg-gradient-to-b from-bg/50 via-bg/20 to-bg pointer-events-none" />

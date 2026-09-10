@@ -83,6 +83,13 @@ body {
 
 .animate-float { animation: float 6s ease-in-out infinite; }
 
+@keyframes hero-fallback-pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+.hero-fallback-pulse { animation: hero-fallback-pulse 5s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

@@ -63,15 +63,24 @@ export default function Footer() {
             <div className="flex flex-wrap gap-2">
               {socialLinks.map((social) => {
                 const Icon = iconMap[social.icon];
-                return (
-                  <div
+                const className = `w-11 h-11 rounded-lg border flex items-center justify-center transition-colors ${
+                  social.available
+                    ? 'border-border bg-surface text-text-secondary hover:text-accent hover:border-accent/30'
+                    : 'border-border/50 bg-surface-2 text-text-muted/40'
+                }`;
+                return social.available ? (
+                  <a
                     key={social.label}
-                    className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors ${
-                      social.available
-                        ? 'border-border bg-surface text-text-secondary hover:text-accent hover:border-accent/30 cursor-pointer'
-                        : 'border-border/50 bg-surface-2 text-text-muted/40'
-                    }`}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className={className}
                   >
+                    {Icon && <Icon size={16} />}
+                  </a>
+                ) : (
+                  <div key={social.label} aria-hidden="true" className={className}>
                     {Icon && <Icon size={16} />}
                   </div>
                 );

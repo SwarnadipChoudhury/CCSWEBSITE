@@ -24,7 +24,7 @@ const initialData: FormData = {
 };
 
 const inputClass =
-  'w-full bg-bg border border-border px-4 py-3 text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors';
+  'w-full bg-bg border border-border px-4 py-3 text-base md:text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors';
 
 export default function Join() {
   const [formData, setFormData] = useState<FormData>(initialData);

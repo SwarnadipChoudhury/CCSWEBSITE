@@ -70,7 +70,7 @@ export default function Navbar() {
             </button>
             <button
               onClick={() => setMenuOpen(true)}
-              className="lg:hidden flex items-center justify-center w-9 h-9 border border-border text-text-secondary hover:text-text hover:border-border-bright transition-colors bg-surface"
+              className="lg:hidden flex items-center justify-center w-11 h-11 border border-border text-text-secondary hover:text-text hover:border-border-bright transition-colors bg-surface"
               aria-label="Open menu"
             >
               <Menu size={18} />
@@ -91,7 +91,7 @@ export default function Navbar() {
               <span className="font-mono text-[10px] text-text-muted tracking-wider">MENU</span>
               <button
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center w-9 h-9 border border-border text-text-secondary hover:text-text transition-colors bg-surface"
+                className="flex items-center justify-center w-11 h-11 border border-border text-text-secondary hover:text-text transition-colors bg-surface"
                 aria-label="Close menu"
               >
                 <X size={18} />
