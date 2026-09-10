@@ -2,12 +2,22 @@ import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
+function prefersReducedMotion() {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function isCoarsePointer() {
+  return typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+}
+
 function NetworkNodes() {
   const groupRef = useRef<THREE.Group>(null);
   const lineRef = useRef<THREE.LineSegments>(null);
+  const reduceMotion = useMemo(() => prefersReducedMotion(), []);
+  const coarse = useMemo(() => isCoarsePointer(), []);
 
   const { positions, linePositions, nodeCount } = useMemo(() => {
-    const nodeCount = 50;
+    const nodeCount = coarse ? 28 : 50;
     const positions = new Float32Array(nodeCount * 3);
     const radius = 5;
 
@@ -38,9 +48,10 @@ function NetworkNodes() {
     }
 
     return { positions, linePositions: new Float32Array(lines), nodeCount };
-  }, []);
+  }, [coarse]);
 
   useFrame((state) => {
+    if (reduceMotion) return;
     if (groupRef.current) {
       groupRef.current.rotation.y = state.clock.elapsedTime * 0.08;
       groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.15) * 0.1;
@@ -91,8 +102,10 @@ function NetworkNodes() {
 
 function CoreShape() {
   const ref = useRef<THREE.Mesh>(null);
+  const reduceMotion = useMemo(() => prefersReducedMotion(), []);
 
   useFrame((state) => {
+    if (reduceMotion) return;
     if (ref.current) {
       ref.current.rotation.x = state.clock.elapsedTime * 0.2;
       ref.current.rotation.y = state.clock.elapsedTime * 0.15;
@@ -113,10 +126,12 @@ function CoreShape() {
 }
 
 export default function HeroScene() {
+  const coarse = useMemo(() => isCoarsePointer(), []);
+
   return (
     <Canvas
       camera={{ position: [0, 0, 8], fov: 50 }}
-      dpr={[1, 1.5]}
+      dpr={coarse ? [1, 1] : [1, 1.5]}
       gl={{ antialias: true, alpha: true }}
       style={{ width: '100%', height: '100%' }}
     >

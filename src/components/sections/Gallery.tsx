@@ -54,30 +54,36 @@ export default function Gallery() {
               ))}
             </div>
 
-            <div className="mt-8 columns-1 sm:columns-2 lg:columns-3 gap-4">
-              {filtered.map((img, i) => (
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-80px' }}
+              variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
+              className="mt-8 columns-1 sm:columns-2 lg:columns-3 gap-4"
+            >
+              {filtered.map((img) => (
                 <motion.div
                   key={img.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: (i % 3) * 0.08 }}
-                  onClick={() => setLightbox(i)}
+                  variants={{
+                    hidden: { opacity: 0, scale: 0.97 },
+                    visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+                  }}
+                  onClick={() => setLightbox(filtered.indexOf(img))}
                   className="group relative mb-4 overflow-hidden border border-border cursor-pointer hover:border-accent/30 transition-colors bg-surface"
                 >
                   <img
                     src={img.url}
                     alt={img.alt}
                     loading="lazy"
-                    className="w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <span className="absolute bottom-3 left-3 font-mono text-xs text-text-secondary opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <span className="absolute bottom-3 left-3 font-mono text-xs text-text-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     {img.category}
                   </span>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             <AnimatePresence>
               {lightbox !== null && (
@@ -95,9 +101,10 @@ export default function Gallery() {
                     <X size={20} />
                   </button>
                   <motion.img
-                    initial={{ scale: 0.9, opacity: 0 }}
+                    initial={{ scale: 0.94, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.9, opacity: 0 }}
+                    exit={{ scale: 0.96, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     src={filtered[lightbox].url}
                     alt={filtered[lightbox].alt}
                     className="max-w-full max-h-[80vh] object-contain"

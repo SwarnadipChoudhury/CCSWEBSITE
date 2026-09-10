@@ -1,8 +1,9 @@
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, useScroll, useSpring, useReducedMotion } from 'framer-motion';
 
 export default function ScrollProgress() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
+  const reduceMotion = useReducedMotion();
+  const smoothed = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
@@ -11,7 +12,7 @@ export default function ScrollProgress() {
   return (
     <motion.div
       className="fixed top-0 left-0 right-0 h-[2px] bg-accent z-[140] origin-left"
-      style={{ scaleX }}
+      style={{ scaleX: reduceMotion ? scrollYProgress : smoothed }}
     />
   );
 }

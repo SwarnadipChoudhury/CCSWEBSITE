@@ -56,10 +56,10 @@ export default function Join() {
             </motion.div>
 
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 48, scale: 0.98 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ delay: 0.1 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="font-display font-semibold text-3xl md:text-5xl lg:text-6xl tracking-tight leading-[1.05] text-text"
             >
               Your Next Project{' '}
@@ -96,10 +96,10 @@ export default function Join() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            initial={{ opacity: 0, y: 40, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="bg-surface border border-border p-6 md:p-8"
           >
             {submitted ? (

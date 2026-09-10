@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { projects, hasProjects } from '@/data/projects';
 import { sectionLabels } from '@/data/navigation';
+import { useMotionPrefs } from '@/hooks/useMotionPrefs';
 
 const statusLabels: Record<string, string> = {
   planned: 'Planned',
@@ -10,6 +11,7 @@ const statusLabels: Record<string, string> = {
 };
 
 export default function Projects() {
+  const { allowRichMotion } = useMotionPrefs();
   return (
     <section id="projects" className="relative py-20 md:py-28 px-5 md:px-8 bg-bg-warm">
       <div className="max-w-[1200px] mx-auto">
@@ -65,10 +67,18 @@ export default function Projects() {
             {projects.map((project, i) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: (i % 2) * 0.08 }}
+                initial={
+                  allowRichMotion
+                    ? { clipPath: 'inset(0 0 0 100%)', opacity: 0 }
+                    : { opacity: 0, y: 16 }
+                }
+                whileInView={
+                  allowRichMotion
+                    ? { clipPath: 'inset(0 0 0 0%)', opacity: 1 }
+                    : { opacity: 1, y: 0 }
+                }
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ delay: (i % 2) * 0.08, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 className="border-b border-border py-8 grid grid-cols-12 gap-4 items-start"
               >
                 <div className="col-span-2 md:col-span-1">
@@ -97,13 +107,23 @@ export default function Projects() {
                   <span className="text-xs text-text-muted block mb-3">Team: {project.team}</span>
                   <div className="flex md:justify-end gap-4">
                     {project.github && (
-                      <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:underline">
-                        Code
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-1 text-sm text-accent hover:gap-1.5 transition-all"
+                      >
+                        Code <ArrowUpRight size={13} className="opacity-0 group-hover:opacity-100 -ml-1 group-hover:ml-0 transition-all" />
                       </a>
                     )}
                     {project.demo && (
-                      <a href={project.demo} target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:underline">
-                        Demo
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-1 text-sm text-accent hover:gap-1.5 transition-all"
+                      >
+                        Demo <ArrowUpRight size={13} className="opacity-0 group-hover:opacity-100 -ml-1 group-hover:ml-0 transition-all" />
                       </a>
                     )}
                   </div>

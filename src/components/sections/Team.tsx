@@ -75,10 +75,10 @@ export default function Team() {
             {team.map((member, i) => (
               <motion.div
                 key={member.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: (i % 4) * 0.06 }}
+                initial={{ opacity: 0, scale: 0.97 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: (i % 4) * 0.06, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 className="group"
               >
                 <div className="relative h-56 overflow-hidden bg-surface border border-border mb-3">

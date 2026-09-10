@@ -1,7 +1,9 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Calendar, ArrowRight, Building2, Users } from 'lucide-react';
 import { events, hasUpcomingEvents } from '@/data/events';
 import { sectionLabels } from '@/data/navigation';
+import { useMotionPrefs } from '@/hooks/useMotionPrefs';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -21,9 +23,17 @@ const organizedByLabel: Record<string, { label: string; icon: typeof Building2 }
 export default function Events() {
   const upcoming = events.filter((e) => e.status === 'upcoming');
   const past = events.filter((e) => e.status === 'past');
+  const sectionRef = useRef<HTMLElement>(null);
+  const { allowRichMotion } = useMotionPrefs();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const dateColX = useTransform(scrollYProgress, [0, 1], [0, allowRichMotion ? -18 : 0]);
 
   return (
-    <section id="events" className="relative py-20 md:py-28 px-5 md:px-8">
+    <section ref={sectionRef} id="events" className="relative py-20 md:py-28 px-5 md:px-8">
       <div className="max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
           <div className="lg:col-span-8">
@@ -79,10 +89,10 @@ export default function Events() {
                 return (
                   <motion.div
                     key={event.id}
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: allowRichMotion ? -28 : 0, y: allowRichMotion ? 0 : 16 }}
+                    whileInView={{ opacity: 1, x: 0, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: i * 0.08 }}
+                    transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     className="border-b border-border py-6 grid grid-cols-12 gap-4 items-start"
                   >
                     <div className="col-span-12 md:col-span-3">
@@ -98,7 +108,7 @@ export default function Events() {
                       <h4 className="font-display font-semibold text-lg text-text mb-1">{event.title}</h4>
                       <p className="text-sm text-text-secondary leading-relaxed">{event.description}</p>
                     </div>
-                    <div className="col-span-12 md:col-span-3 md:text-right">
+                    <motion.div style={{ x: dateColX }} className="col-span-12 md:col-span-3 md:text-right">
                       <span className="flex items-center gap-1.5 text-sm text-text-secondary md:justify-end">
                         <Calendar size={13} /> {formatDate(event.date)}
                       </span>
@@ -112,7 +122,7 @@ export default function Events() {
                           Register <ArrowRight size={13} />
                         </a>
                       )}
-                    </div>
+                    </motion.div>
                   </motion.div>
                 );
               })}

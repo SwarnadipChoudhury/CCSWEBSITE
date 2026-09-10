@@ -34,14 +34,20 @@ export default function Domains() {
           </div>
         </div>
 
-        <div className="border-t border-border">
-          {domains.map((domain, i) => (
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={{ visible: { transition: { staggerChildren: 0.07 } } }}
+          className="border-t border-border"
+        >
+          {domains.map((domain) => (
             <motion.div
               key={domain.number}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: (i % 2) * 0.06 }}
+              variants={{
+                hidden: { opacity: 0, y: 18 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
+              }}
               className="group border-b border-border py-5 md:py-6 grid grid-cols-12 gap-4 items-baseline hover:bg-surface/60 transition-colors duration-300 px-2 -mx-2"
             >
               <div className="col-span-2 md:col-span-1">
@@ -61,7 +67,7 @@ export default function Domains() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

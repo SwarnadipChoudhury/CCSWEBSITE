@@ -1,6 +1,7 @@
-import { Suspense, lazy } from 'react';
-import { motion } from 'framer-motion';
+import { Suspense, lazy, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, ArrowDown } from 'lucide-react';
+import { useMotionPrefs } from '@/hooks/useMotionPrefs';
 
 const HeroScene = lazy(() => import('@/components/HeroScene'));
 
@@ -9,30 +10,46 @@ const scrollTo = (href: string) => {
 };
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { allowRichMotion } = useMotionPrefs();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, allowRichMotion ? -70 : 0]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const sceneScale = useTransform(scrollYProgress, [0, 1], [1, allowRichMotion ? 1.12 : 1]);
+  const sceneY = useTransform(scrollYProgress, [0, 1], [0, allowRichMotion ? 40 : 0]);
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
-      <div className="absolute inset-0 z-0">
+    <section ref={sectionRef} id="home" className="relative min-h-screen flex items-center overflow-hidden">
+      <motion.div className="absolute inset-0 z-0" style={{ scale: sceneScale, y: sceneY }}>
         <Suspense fallback={null}>
           <HeroScene />
         </Suspense>
-      </div>
+      </motion.div>
 
       <div className="absolute inset-0 z-1 bg-gradient-to-b from-bg/50 via-bg/20 to-bg pointer-events-none" />
 
-      <div className="relative z-10 max-w-[1200px] mx-auto px-5 md:px-8 w-full pt-20">
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 max-w-[1200px] mx-auto px-5 md:px-8 w-full pt-20"
+      >
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+          transition={{ delay: 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="font-mono text-[10px] md:text-xs text-accent tracking-[0.2em] mb-8"
         >
           ARKA JAIN UNIVERSITY — JHARKHAND
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.7 }}
+          transition={{ delay: 0.4, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
           className="font-display font-bold text-[2.25rem] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.0] text-text"
         >
           CODE. COMPUTE.
@@ -41,9 +58,9 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.7 }}
+          transition={{ delay: 0.65, duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="mt-8 text-base md:text-lg text-text-secondary max-w-lg leading-relaxed"
         >
           The student technology community at ARKA JAIN University — for students who build,
@@ -51,9 +68,9 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.75, duration: 0.7 }}
+          transition={{ delay: 0.85, duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="mt-10 flex flex-col sm:flex-row gap-3"
         >
           <button
@@ -71,17 +88,17 @@ export default function Hero() {
             <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
           </button>
         </motion.div>
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
+        transition={{ delay: 1.2 }}
         className="absolute bottom-6 left-5 md:left-8 z-10 flex items-center gap-2 text-text-muted"
       >
         <span className="font-mono text-[10px] tracking-[0.15em]">SCROLL</span>
         <motion.div
-          animate={{ y: [0, 4, 0] }}
+          animate={allowRichMotion ? { y: [0, 4, 0] } : {}}
           transition={{ duration: 1.5, repeat: Infinity }}
         >
           <ArrowDown size={14} />

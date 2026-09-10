@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { Github, Linkedin, Instagram, MessageCircle } from 'lucide-react';
 import { navLinks } from '@/data/navigation';
 import { socialLinks } from '@/data/socials';
@@ -16,7 +17,13 @@ export default function Footer() {
 
   return (
     <footer className="relative border-t border-border px-5 md:px-8 py-16 bg-bg-warm">
-      <div className="max-w-[1400px] mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-[1400px] mx-auto"
+      >
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
@@ -81,7 +88,7 @@ export default function Footer() {
             Designed &amp; built by CCS community.
           </p>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }
