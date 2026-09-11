@@ -46,14 +46,18 @@ export default function Achievements() {
                   alignRight ? 'md:pl-[32%] md:text-left' : 'md:pr-[32%]'
                 }`}
               >
-                <span
+                <motion.span
                   aria-hidden
-                  className={`pointer-events-none select-none absolute top-2 md:top-4 font-display font-bold text-[5rem] md:text-[8rem] leading-none text-text opacity-[0.045] ${
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  whileInView={{ opacity: 0.045, scale: 1 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ delay: 0.25, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  className={`pointer-events-none select-none absolute top-2 md:top-4 font-display font-bold text-[5rem] md:text-[8rem] leading-none text-text ${
                     alignRight ? 'right-0 md:right-4' : 'left-0 md:left-4'
                   }`}
                 >
                   {String(i + 1).padStart(2, '0')}
-                </span>
+                </motion.span>
 
                 <div className="relative flex items-center gap-2 mb-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-green" />

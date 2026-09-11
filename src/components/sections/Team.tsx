@@ -75,10 +75,10 @@ export default function Team() {
             {team.map((member, i) => (
               <motion.div
                 key={member.id}
-                initial={{ opacity: 0, scale: 0.97 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.92, y: 30 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: (i % 4) * 0.06, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: (i % 4) * 0.08, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 className="group"
               >
                 <div className="relative h-56 overflow-hidden bg-surface border border-border mb-3">
@@ -88,13 +88,18 @@ export default function Team() {
                       alt={member.name}
                       loading="lazy"
                       decoding="async"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-text-muted">
                       <span className="font-mono text-xs">No photo</span>
                     </div>
                   )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-bg/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end p-3">
+                    <p className="text-xs text-text-secondary translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-400">
+                      {member.role}
+                    </p>
+                  </div>
                 </div>
                 <h3 className="font-display font-semibold text-base text-text">{member.name}</h3>
                 <p className="text-xs text-accent font-mono mt-1">{member.role}</p>

@@ -74,37 +74,52 @@ export default function Gallery() {
               variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
               className="mt-8 columns-1 sm:columns-2 lg:columns-3 gap-4"
             >
-              {filtered.map((img) => (
-                <motion.div
-                  key={img.id}
-                  variants={{
-                    hidden: { opacity: 0, scale: 0.97 },
-                    visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-                  }}
-                  onClick={() => setLightbox(filtered.indexOf(img))}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setLightbox(filtered.indexOf(img));
-                    }
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`View image: ${img.alt}`}
-                  className="group relative mb-4 overflow-hidden border border-border cursor-pointer hover:border-accent/30 transition-colors bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  <img
-                    src={img.url}
-                    alt={img.alt}
-                    loading="lazy"
-                    className="w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <span className="absolute bottom-3 left-3 font-mono text-xs text-text-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    {img.category}
-                  </span>
-                </motion.div>
-              ))}
+              {filtered.map((img, i) => {
+                const revealDirections = [
+                  { y: 26, x: 0 },
+                  { y: 0, x: -20 },
+                  { y: 0, x: 20 },
+                  { y: 34, x: 0 },
+                ];
+                const offset = revealDirections[i % revealDirections.length];
+                return (
+                  <motion.div
+                    key={img.id}
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.97, ...offset },
+                      visible: {
+                        opacity: 1,
+                        scale: 1,
+                        x: 0,
+                        y: 0,
+                        transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+                      },
+                    }}
+                    onClick={() => setLightbox(filtered.indexOf(img))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setLightbox(filtered.indexOf(img));
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`View image: ${img.alt}`}
+                    className="group relative mb-4 overflow-hidden border border-border cursor-pointer hover:border-accent/30 transition-colors bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  >
+                    <img
+                      src={img.url}
+                      alt={img.alt}
+                      loading="lazy"
+                      className="w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <span className="absolute bottom-3 left-3 font-mono text-xs text-text-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-1 group-hover:translate-y-0">
+                      {img.category}
+                    </span>
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
             <AnimatePresence>

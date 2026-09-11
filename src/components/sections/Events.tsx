@@ -82,7 +82,12 @@ export default function Events() {
               </p>
             </div>
           ) : (
-            <div className="border-t border-border">
+            <div className="relative border-t border-border pl-5 md:pl-6">
+              <motion.div
+                style={{ scaleY: scrollYProgress }}
+                className="hidden md:block absolute left-0 top-0 bottom-0 w-px bg-accent origin-top"
+              />
+              <div className="hidden md:block absolute left-0 top-0 bottom-0 w-px bg-border -z-10" />
               {upcoming.map((event, i) => {
                 const orgInfo = organizedByLabel[event.organizedBy];
                 const OrgIcon = orgInfo.icon;
@@ -93,8 +98,15 @@ export default function Events() {
                     whileInView={{ opacity: 1, x: 0, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                    className="border-b border-border py-6 grid grid-cols-12 gap-4 items-start"
+                    className="relative border-b border-border py-6 grid grid-cols-12 gap-4 items-start"
                   >
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.08 + 0.15, type: 'spring', stiffness: 300, damping: 18 }}
+                      className="hidden md:block absolute -left-[26px] top-7 w-2.5 h-2.5 rounded-full bg-accent border-2 border-bg"
+                    />
                     <div className="col-span-12 md:col-span-3">
                       <div className="flex items-center gap-2 text-xs">
                         <span className="font-mono text-accent">{event.category}</span>

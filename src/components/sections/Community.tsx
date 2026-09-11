@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { socialLinks } from '@/data/socials';
 import { sectionLabels } from '@/data/navigation';
+import { StaggerContainer, StaggerItem } from '@/components/motion/Reveal';
 
 export default function Community() {
   return (
@@ -46,13 +47,18 @@ export default function Community() {
             <p className="font-display text-2xl md:text-4xl tracking-tight text-text max-w-lg leading-tight mb-8">
               Ready to build something?
             </p>
-            <button
+            <motion.button
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ scale: 1.03 }}
               onClick={() => document.querySelector('#join')?.scrollIntoView({ behavior: 'smooth' })}
               className="group inline-flex items-center gap-2 px-6 py-3 bg-accent text-white font-medium text-sm hover:bg-accent-dim transition-colors"
             >
               Join CCS
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+            </motion.button>
           </motion.div>
 
           <motion.div
@@ -65,10 +71,13 @@ export default function Community() {
             <p className="font-mono text-[10px] text-text-muted tracking-wider uppercase mb-4">
               Elsewhere
             </p>
-            <div className="flex flex-wrap gap-x-6 gap-y-3">
+            <StaggerContainer stagger={0.06} delayChildren={0.15} margin="-40px" className="flex flex-wrap gap-x-6 gap-y-3">
               {socialLinks.map((social) => (
-                <span
+                <StaggerItem
                   key={social.label}
+                  direction="up"
+                  distance={6}
+                  scale
                   className={`text-sm ${social.available ? 'text-text' : 'text-text-muted'}`}
                 >
                   {social.label}
@@ -79,9 +88,9 @@ export default function Community() {
                   >
                     {social.available ? '●' : '○'}
                   </span>
-                </span>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
           </motion.div>
         </div>
       </div>

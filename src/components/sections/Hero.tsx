@@ -73,14 +73,14 @@ export default function Hero() {
         >
           <button
             onClick={() => scrollTo('#about')}
-            className="group flex items-center justify-center gap-2 px-5 py-3 bg-accent text-white font-medium text-sm hover:bg-accent-dim transition-colors"
+            className="group flex items-center justify-center gap-2 px-5 py-3 bg-accent text-white font-medium text-sm hover:bg-accent-dim hover:scale-[1.03] active:scale-[0.98] transition-all"
           >
             Explore CCS
             <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
           </button>
           <button
             onClick={() => scrollTo('#join')}
-            className="group flex items-center justify-center gap-2 px-5 py-3 border border-border-bright bg-surface text-text font-medium text-sm hover:border-accent hover:text-accent transition-colors"
+            className="group flex items-center justify-center gap-2 px-5 py-3 border border-border-bright bg-surface text-text font-medium text-sm hover:border-accent hover:text-accent hover:scale-[1.03] active:scale-[0.98] transition-all"
           >
             Join the Community
             <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />

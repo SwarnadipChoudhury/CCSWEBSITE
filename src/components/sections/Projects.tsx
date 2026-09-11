@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { projects, hasProjects } from '@/data/projects';
 import { sectionLabels } from '@/data/navigation';
 import { useMotionPrefs } from '@/hooks/useMotionPrefs';
+import { StaggerContainer, StaggerItem } from '@/components/motion/Reveal';
 
 const statusLabels: Record<string, string> = {
   planned: 'Planned',
@@ -79,7 +80,7 @@ export default function Projects() {
                 }
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ delay: (i % 2) * 0.08, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="border-b border-border py-8 grid grid-cols-12 gap-4 items-start"
+                className="border-b border-border hover:border-accent/30 transition-colors duration-300 py-8 grid grid-cols-12 gap-4 items-start"
               >
                 <div className="col-span-2 md:col-span-1">
                   <span className="font-mono text-xs text-text-muted">
@@ -89,18 +90,26 @@ export default function Projects() {
                 <div className="col-span-10 md:col-span-7">
                   <h3 className="font-display font-semibold text-lg text-text mb-2">{project.name}</h3>
                   <p className="text-sm text-text-secondary leading-relaxed mb-3">{project.description}</p>
-                  <div className="flex flex-wrap gap-1.5">
+                  <StaggerContainer stagger={0.05} delayChildren={0.2} margin="-40px" className="flex flex-wrap gap-1.5">
                     {project.technologies.map((tech) => (
-                      <span
+                      <StaggerItem
                         key={tech}
+                        direction="up"
+                        distance={8}
                         className="px-2 py-0.5 bg-bg border border-border text-[11px] font-mono text-text-secondary"
                       >
                         {tech}
-                      </span>
+                      </StaggerItem>
                     ))}
-                  </div>
+                  </StaggerContainer>
                 </div>
-                <div className="col-span-12 md:col-span-4 md:text-right">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="col-span-12 md:col-span-4 md:text-right"
+                >
                   <span className="font-mono text-xs text-text-muted block mb-2">
                     {statusLabels[project.status]}
                   </span>
@@ -127,7 +136,7 @@ export default function Projects() {
                       </a>
                     )}
                   </div>
-                </div>
+                </motion.div>
               </motion.div>
             ))}
           </div>

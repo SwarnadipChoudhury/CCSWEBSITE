@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check } from 'lucide-react';
 import { sectionLabels } from '@/data/navigation';
+import { StaggerContainer, StaggerItem } from '@/components/motion/Reveal';
 
 interface FormData {
   name: string;
@@ -78,22 +79,16 @@ export default function Join() {
               CCS is a place to learn, collaborate and create.
             </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="mt-8 space-y-3"
-            >
+            <StaggerContainer stagger={0.08} delayChildren={0.3} className="mt-8 space-y-3">
               {['No prior experience required', 'Open to all AJU students', 'Learn at your own pace'].map((item) => (
-                <div key={item} className="flex items-center gap-3 text-sm text-text-secondary">
+                <StaggerItem key={item} direction="left" distance={16} className="flex items-center gap-3 text-sm text-text-secondary">
                   <div className="w-5 h-5 rounded-full bg-green-light border border-green/20 flex items-center justify-center">
                     <Check size={12} className="text-green" />
                   </div>
                   {item}
-                </div>
+                </StaggerItem>
               ))}
-            </motion.div>
+            </StaggerContainer>
           </div>
 
           <motion.div
@@ -218,13 +213,15 @@ export default function Join() {
                   />
                 </div>
 
-                <button
+                <motion.button
                   type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   className="group w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-accent text-white font-medium text-sm hover:bg-accent-dim transition-colors"
                 >
                   Join the Community
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                </button>
+                </motion.button>
 
                 <p className="text-center text-xs text-text-muted font-mono">
                   Frontend-ready · Submission layer to be configured
