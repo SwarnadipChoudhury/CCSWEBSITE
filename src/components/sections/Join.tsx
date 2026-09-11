@@ -42,8 +42,9 @@ export default function Join() {
   };
 
   return (
-    <section id="join" className="relative py-24 md:py-32 px-5 md:px-8 bg-bg-warm">
-      <div className="max-w-[1400px] mx-auto">
+    <section id="join" className="relative py-24 md:py-32 px-5 md:px-8">
+      <div className="absolute inset-0 z-0 bg-bg-warm/80 pointer-events-none" />
+      <div className="relative z-10 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           <div>
             <motion.div
@@ -62,8 +63,8 @@ export default function Join() {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="font-display font-semibold text-3xl md:text-5xl lg:text-6xl tracking-tight leading-[1.05] text-text"
             >
-              Your Next Project{' '}
-              <span className="text-text-muted">Could Start Here.</span>
+              Ready to Build{' '}
+              <span className="text-text-muted">Something?</span>
             </motion.h2>
 
             <motion.p

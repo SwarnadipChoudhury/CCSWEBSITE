@@ -1,5 +1,5 @@
-// Lightweight stand-in for the Three.js hero scene on small/low-power screens.
-// Pure SVG + CSS — no WebGL context, no Three.js bundle, no per-frame JS work.
+// Lightweight stand-in for the CCS Network on small/low-power screens.
+// Pure SVG + CSS — no WebGL context, no Three.js bundle, no per-frame JS.
 // Respects prefers-reduced-motion via the global rule in index.css.
 
 const nodes = [
@@ -14,7 +14,7 @@ const edges: [number, number][] = [
   [6, 8], [7, 8], [6, 7],
 ];
 
-export default function HeroSceneFallback() {
+export default function NetworkFallback() {
   return (
     <svg
       viewBox="0 0 400 400"
@@ -22,20 +22,14 @@ export default function HeroSceneFallback() {
       className="w-full h-full hero-fallback-pulse"
       aria-hidden="true"
     >
-      <g stroke="#159A9C" strokeWidth="1" opacity="0.18">
+      <g stroke="#159A9C" strokeWidth="1" opacity="0.14">
         {edges.map(([a, b], i) => (
-          <line
-            key={i}
-            x1={nodes[a].x}
-            y1={nodes[a].y}
-            x2={nodes[b].x}
-            y2={nodes[b].y}
-          />
+          <line key={i} x1={nodes[a].x} y1={nodes[a].y} x2={nodes[b].x} y2={nodes[b].y} />
         ))}
       </g>
       <g fill="#3157D5">
         {nodes.map((n, i) => (
-          <circle key={i} cx={n.x} cy={n.y} r={i === 4 ? 4 : 2.5} opacity="0.75" />
+          <circle key={i} cx={n.x} cy={n.y} r={i === 4 ? 4 : 2.5} opacity="0.6" />
         ))}
       </g>
       <polygon
@@ -43,7 +37,7 @@ export default function HeroSceneFallback() {
         fill="none"
         stroke="#3157D5"
         strokeWidth="1"
-        opacity="0.12"
+        opacity="0.1"
       />
     </svg>
   );

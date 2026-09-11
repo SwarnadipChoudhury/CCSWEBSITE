@@ -5,6 +5,7 @@ import Cursor from '@/components/Cursor';
 import Navbar from '@/components/Navbar';
 import ScrollProgress from '@/components/ScrollProgress';
 import BackgroundGrid from '@/components/BackgroundGrid';
+import NetworkBackground from '@/components/NetworkBackground';
 import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
 import Domains from '@/components/sections/Domains';
@@ -27,9 +28,10 @@ function App() {
     <>
       {!loaded && <Loader onComplete={() => setLoaded(true)} />}
       <div className="grain" />
+      <NetworkBackground />
+      <BackgroundGrid />
       <Cursor />
       <ScrollProgress />
-      <BackgroundGrid />
       <Navbar />
       <main className="relative z-10">
         <Hero />

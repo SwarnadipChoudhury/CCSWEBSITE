@@ -1,13 +1,7 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { useMotionPrefs } from '@/hooks/useMotionPrefs';
-import HeroSceneFallback from '@/components/HeroSceneFallback';
-
-// Three.js + react-three-fiber is a ~240kB (gzip) chunk. It's only ever
-// requested when this import actually runs, so gating it behind a
-// tablet/desktop viewport check means phones never download it at all.
-const HeroScene = lazy(() => import('@/components/HeroScene'));
 
 const scrollTo = (href: string) => {
   document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
@@ -16,15 +10,6 @@ const scrollTo = (href: string) => {
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const { allowRichMotion } = useMotionPrefs();
-  const [enable3D, setEnable3D] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)');
-    const update = () => setEnable3D(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -33,22 +18,10 @@ export default function Hero() {
 
   const contentY = useTransform(scrollYProgress, [0, 1], [0, allowRichMotion ? -70 : 0]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
-  const sceneScale = useTransform(scrollYProgress, [0, 1], [1, allowRichMotion ? 1.12 : 1]);
-  const sceneY = useTransform(scrollYProgress, [0, 1], [0, allowRichMotion ? 40 : 0]);
 
   return (
     <section ref={sectionRef} id="home" className="relative min-h-screen flex items-center overflow-hidden">
-      <motion.div className="absolute inset-0 z-0" style={{ scale: sceneScale, y: sceneY }}>
-        {enable3D ? (
-          <Suspense fallback={<HeroSceneFallback />}>
-            <HeroScene />
-          </Suspense>
-        ) : (
-          <HeroSceneFallback />
-        )}
-      </motion.div>
-
-      <div className="absolute inset-0 z-1 bg-gradient-to-b from-bg/50 via-bg/20 to-bg pointer-events-none" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-bg/45 via-bg/15 to-bg pointer-events-none" />
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
@@ -58,7 +31,15 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="font-mono text-[10px] md:text-xs text-accent tracking-[0.2em] mb-8"
+          className="font-mono text-[10px] md:text-xs text-accent tracking-[0.2em] mb-3"
+        >
+          CODE AND COMPUTE SOCIETY
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="font-mono text-[10px] md:text-xs text-text-muted tracking-[0.2em] mb-8"
         >
           ARKA JAIN UNIVERSITY — JHARKHAND
         </motion.div>

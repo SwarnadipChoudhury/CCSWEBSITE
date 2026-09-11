@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion';
 import { domains } from '@/data/domains';
 import { sectionLabels } from '@/data/navigation';
+import { setActiveDomain } from '@/lib/networkState';
 
 export default function Domains() {
   return (
-    <section id="domains" className="relative py-20 md:py-28 px-5 md:px-8 bg-bg-warm">
-      <div className="max-w-[1200px] mx-auto">
+    <section id="domains" className="relative py-20 md:py-28 px-5 md:px-8">
+      <div className="absolute inset-0 z-0 bg-bg-warm/92 pointer-events-none" />
+      <div className="relative z-10 max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
           <div className="lg:col-span-8">
             <motion.div
@@ -41,13 +43,15 @@ export default function Domains() {
           variants={{ visible: { transition: { staggerChildren: 0.07 } } }}
           className="border-t border-border"
         >
-          {domains.map((domain) => (
+          {domains.map((domain, i) => (
             <motion.div
               key={domain.number}
               variants={{
                 hidden: { opacity: 0, y: 18 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
               }}
+              onMouseEnter={() => setActiveDomain(i)}
+              onMouseLeave={() => setActiveDomain(null)}
               className="group border-b border-border py-5 md:py-6 grid grid-cols-12 gap-4 items-baseline hover:bg-surface/60 transition-colors duration-300 px-2 -mx-2"
             >
               <div className="col-span-2 md:col-span-1">
